@@ -1,0 +1,45 @@
+# Copy this file to terraform.tfvars and fill in your values
+
+# Proxmox Configuration
+api_token = "terraform@pve!terraform=your-token-here"
+
+# Container Configuration
+container_count       = 3
+container_name_prefix = "lxc-app"
+starting_vm_id        = 200
+unprivileged          = true
+
+# Operating System
+template_file_id = "local:vztmpl/ubuntu-22.04-standard_22.04-1_amd64.tar.zst"
+os_type          = "ubuntu"
+
+# Resources
+cpu_cores = 2
+memory    = 1024
+swap      = 512
+disk_size = 10
+
+# Network - Option 1: DHCP
+use_dhcp = true
+
+# Network - Option 2: Static IPs (set use_dhcp = false)
+# For single container:
+# ipv4_address = "192.168.1.100"
+# For multiple containers:
+# ipv4_base    = "192.168.1."
+# ipv4_start   = 100  # Will create 192.168.1.100, 192.168.1.101, etc.
+# ipv4_gateway = "192.168.1.1"
+# ipv4_cidr    = 24
+
+# Features
+features_nesting = true  # Set to true if you want to run Docker inside LXC
+features_fuse    = false
+
+# Authentication
+ssh_keys      = ["ssh-rsa AAAAB3... your-key-here"]
+# root_password = "your-password"  # Optional
+
+# Common
+node_name      = "pve01"
+datastore_id   = "local-lvm"
+tags           = ["terraform", "lxc"]

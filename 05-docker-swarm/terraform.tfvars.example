@@ -1,0 +1,39 @@
+
+proxmox = {
+  endpoint    = "https://proxmox.example.com:8006/"
+  api_token   = "terraform@pve!terraform=your-token-here"
+  insecure    = true
+  node_name   = "pve01"
+  template_id = 9100
+}
+
+swarm_managers = [
+  {
+    name       = "docker-manager-01"
+    cpu_cores  = 2
+    memory_mb  = 2048
+    ip_address = "10.0.100.50/24"
+    bridge     = "vmbr0"
+  }
+]
+
+swarm_workers = [
+  {
+    name       = "docker-worker-01"
+    cpu_cores  = 2
+    memory_mb  = 4096
+    ip_address = "10.0.100.51/24"
+    bridge     = "vmbr0"
+  },
+  {
+    name       = "docker-worker-02"
+    cpu_cores  = 2
+    memory_mb  = 4096
+    ip_address = "10.0.100.52/24"
+    bridge     = "vmbr0"
+  }
+]
+
+vlan_id        = 100
+ssh_public_key = "/home/user/.ssh/id_rsa.pub"
+tags           = ["terraform", "docker", "swarm"]

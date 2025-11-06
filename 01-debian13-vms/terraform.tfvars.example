@@ -1,0 +1,31 @@
+
+proxmox = {
+  endpoint    = "https://proxmox.example.com:8006/"
+  api_token   = "terraform@pve!terraform=your-token-here"
+  insecure    = true
+  node_name   = "pve01"
+  template_id = 9100
+}
+
+vms = [
+  {
+    name       = "debian13-vm-01"
+    cpu_cores  = 2
+    memory_mb  = 2048
+    disk_gb    = 20
+    ip_address = "10.0.100.40/24"
+    bridge     = "vmbr0"
+  },
+  {
+    name       = "debian13-vm-02"
+    cpu_cores  = 2
+    memory_mb  = 2048
+    disk_gb    = 20
+    ip_address = "10.0.100.41/24"
+    bridge     = "vmbr0"
+  }
+]
+
+vlan_id        = 100
+ssh_public_key = "/home/user/.ssh/id_rsa.pub"
+tags           = ["terraform", "debian13"]

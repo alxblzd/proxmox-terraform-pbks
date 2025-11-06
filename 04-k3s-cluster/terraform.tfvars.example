@@ -1,0 +1,39 @@
+
+proxmox = {
+  endpoint    = "https://proxmox.example.com:8006/"
+  api_token   = "terraform@pve!terraform=your-token-here"
+  insecure    = true
+  node_name   = "pve01"
+  template_id = 9100
+}
+
+k3s_master = [
+  {
+    name       = "k3s-master-01"
+    cpu_cores  = 2
+    memory_mb  = 2048
+    ip_address = "10.0.100.10/24"
+    bridge     = "vmbr0"
+  }
+]
+
+k3s_worker = [
+  {
+    name       = "k3s-worker-01"
+    cpu_cores  = 2
+    memory_mb  = 2048
+    ip_address = "10.0.100.11/24"
+    bridge     = "vmbr0"
+  },
+  {
+    name       = "k3s-worker-02"
+    cpu_cores  = 2
+    memory_mb  = 2048
+    ip_address = "10.0.100.12/24"
+    bridge     = "vmbr0"
+  }
+]
+
+vlan_id        = 100
+ssh_public_key = "/home/user/.ssh/id_rsa.pub"
+tags           = ["terraform", "k3s"]

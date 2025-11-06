@@ -1,0 +1,38 @@
+---
+- name: Setup development user
+  hosts: all
+  become: true
+
+  tasks:
+    - name: Test connection
+      ansible.builtin.ping:
+
+    - name: Create user
+      ansible.builtin.user:
+        name: "{{ user.username }}"
+        groups: "{{ user.groups | default([]) }}"
+        append: yes
+        shell: /bin/bash
+        createhome: yes
+        state: present
+      when: user is defined
+
+    - name: Set SSH key
+      ansible.posix.authorized_key:
+        user: "{{ user.username }}"
+        key: "{{ user.ssh_key }}"
+        state: present
+      when:
+        - user is defined
+        - user.ssh_key is defined
+
+    - name: Grant sudo access
+      ansible.builtin.lineinfile:
+        path: "/etc/sudoers.d/{{ user.username }}"
+        line: "{{ user.username }} ALL=(ALL) NOPASSWD:ALL"
+        create: yes
+        mode: '0440'
+        validate: 'visudo -cf %s'
+      when:
+        - user is defined
+        - user.sudo | default(false)

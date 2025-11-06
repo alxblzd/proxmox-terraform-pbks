@@ -1,0 +1,8 @@
+# Example host configuration
+# Copy this file to match your VM hostname
+
+user:
+  username: "developer"
+  ssh_key: "ssh-rsa AAAA..."
+  sudo: true
+  groups: ["docker"]
