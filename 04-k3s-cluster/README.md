@@ -14,12 +14,12 @@ terraform init && terraform apply
 
 ```hcl
 k3s_master = [
-  { name = "k3s-master1", cpu_cores = 2, memory_mb = 2048, ip_address = "10.0.100.12/24", bridge = "vmbr2" }
+  { name = "k3s-master1", cpu_cores = 2, memory_mb = 2048, ip_address = "192.168.100.12/24", bridge = "vmbr0" }
 ]
 
 k3s_worker = [
-  { name = "k3s-worker1", cpu_cores = 2, memory_mb = 2048, ip_address = "10.0.100.13/24", bridge = "vmbr2" }
+  { name = "k3s-worker1", cpu_cores = 2, memory_mb = 2048, ip_address = "192.168.100.13/24", bridge = "vmbr0" }
 ]
 ```
 
-Template: 9100 | VLAN: 100 | User: ansible
+Template: 9100 | Storage: zfs-pool | VLAN: 100 | User: ansible

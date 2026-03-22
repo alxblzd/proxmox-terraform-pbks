@@ -23,11 +23,10 @@ data "local_file" "ssh_pub" {
 }
 
 resource "proxmox_virtual_environment_vm" "vm" {
-  for_each = { for vm in var.vms : vm.name => vm }
-
-  name        = each.value.name
+  vm_id       = var.vm.vmid
+  name        = var.vm.name
   node_name   = var.proxmox.node_name
-  description = "Ubuntu 24.04 LTS VM - Managed by Terraform"
+  description = "Debian 13 VM - Managed by Terraform"
 
   clone {
     vm_id        = var.proxmox.template_id
@@ -42,13 +41,13 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   cpu {
-    cores = each.value.cpu_cores
+    cores = var.vm.cpu_cores
     type  = "host"
   }
 
   memory {
-    dedicated = each.value.memory_mb
-    floating  = each.value.memory_mb
+    dedicated = var.vm.memory_mb
+    floating  = var.vm.memory_mb
   }
 
   vga {
@@ -57,14 +56,14 @@ resource "proxmox_virtual_environment_vm" "vm" {
 
   disk {
     datastore_id = var.datastore_id
-    size         = coalesce(each.value.disk_gb, var.disk_size_gb)
+    size         = var.vm.disk_gb
     interface    = var.disk_interface
     iothread     = true
     discard      = "on"
   }
 
   network_device {
-    bridge  = each.value.bridge
+    bridge  = var.vm.bridge
     vlan_id = var.vlan_id
   }
 
@@ -81,8 +80,8 @@ resource "proxmox_virtual_environment_vm" "vm" {
 
     ip_config {
       ipv4 {
-        address = each.value.ip_address
-        gateway = split("/", each.value.ip_address)[0] != each.value.ip_address ? cidrhost(each.value.ip_address, 1) : null
+        address = var.vm.ip_address
+        gateway = split("/", var.vm.ip_address)[0] != var.vm.ip_address ? cidrhost(var.vm.ip_address, 1) : null
       }
     }
 
@@ -96,28 +95,22 @@ resource "proxmox_virtual_environment_vm" "vm" {
   }
 
   started = true
-  tags    = concat(var.tags, ["ubuntu"])
+  tags    = concat(var.tags, ["debian13"])
 }
 
 output "vm_summary" {
   sensitive = true
   value = {
-    count = length(var.vms)
-    vms = { for k, v in proxmox_virtual_environment_vm.vm :
-      k => {
-        name      = v.name
-        id        = v.id
-        ip        = try(v.ipv4_addresses[1][0], "N/A")
-        cpu_cores = v.cpu[0].cores
-        memory_mb = v.memory[0].dedicated
-      }
-    }
+    name      = proxmox_virtual_environment_vm.vm.name
+    id        = proxmox_virtual_environment_vm.vm.id
+    ip        = try(proxmox_virtual_environment_vm.vm.ipv4_addresses[1][0], "N/A")
+    cpu_cores = proxmox_virtual_environment_vm.vm.cpu[0].cores
+    memory_mb = proxmox_virtual_environment_vm.vm.memory[0].dedicated
+    node      = proxmox_virtual_environment_vm.vm.node_name
   }
 }
 
-output "ssh_commands" {
-  description = "Ready-to-use SSH commands for each VM"
-  value = { for k, v in proxmox_virtual_environment_vm.vm :
-    k => "ssh ${var.cloud_init_username}@${try(v.ipv4_addresses[1][0], "pending")}"
-  }
+output "ssh_command" {
+  description = "Ready-to-use SSH command for the VM"
+  value       = "ssh ${var.cloud_init_username}@${try(proxmox_virtual_environment_vm.vm.ipv4_addresses[1][0], "pending")}"
 }

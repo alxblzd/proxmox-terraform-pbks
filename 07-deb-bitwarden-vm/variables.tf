@@ -8,16 +8,17 @@ variable "proxmox" {
   })
 }
 
-variable "vms" {
-  description = "List of VMs to create"
-  type = list(object({
+variable "vm" {
+  description = "Debian VM settings"
+  type = object({
+    vmid       = number
     name       = string
     cpu_cores  = number
     memory_mb  = number
-    disk_gb    = optional(number)
+    disk_gb    = number
     ip_address = string
     bridge     = string
-  }))
+  })
 }
 
 variable "ssh_public_key" {
@@ -26,11 +27,11 @@ variable "ssh_public_key" {
 
 variable "tags" {
   type    = list(string)
-  default = ["terraform", "ubuntu"]
+  default = ["terraform", "bitwarden"]
 }
 
 variable "vlan_id" {
-  description = "VLAN ID for VM network interfaces"
+  description = "VLAN ID for the VM network interface"
   type        = number
   default     = 100
 }
@@ -47,16 +48,10 @@ variable "datastore_id" {
   default     = "zfs-pool"
 }
 
-variable "disk_size_gb" {
-  description = "Default disk size in GB"
-  type        = number
-  default     = 20
-}
-
 variable "cloud_init_username" {
   description = "Default username for VM access"
   type        = string
-  default     = "ubuntu"
+  default     = "ansible"
 }
 
 variable "cloud_init_password" {

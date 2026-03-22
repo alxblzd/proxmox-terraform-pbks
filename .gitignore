@@ -1,0 +1,38 @@
+# Local Terraform files
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.*
+tfplan
+*.tfplan
+crash.log
+
+# Terraform variable files (often contain secrets)
+*.tfvars
+*.tfvars.json
+!*.tfvars.example
+!*.tfvars.test
+
+# Optional: if you store secrets in local files
+secrets.*
+*.pem
+*.key
+*.crt
+
+# IDE / Editor junk
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+.DS_Store
+
+# OS junk
+Thumbs.db
+
+# Generated files from playbooks
+playbooks/**/k3s-inventory.ini
+playbooks/**/install-k3s.sh
+playbooks/**/docker-inventory.ini
+playbooks/**/install-docker-swarm.sh
+playbooks/**/deploy-portainer.sh

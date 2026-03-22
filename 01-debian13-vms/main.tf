@@ -43,10 +43,16 @@ resource "proxmox_virtual_environment_vm" "vm" {
 
   cpu {
     cores = each.value.cpu_cores
+    type  = "host"
   }
 
   memory {
     dedicated = each.value.memory_mb
+    floating  = each.value.memory_mb
+  }
+
+  vga {
+    type = "std"
   }
 
   disk {

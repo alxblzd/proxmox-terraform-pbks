@@ -38,8 +38,8 @@ data "local_file" "ssh_pub" {
 resource "proxmox_virtual_environment_vm" "master" {
   for_each = { for vm in var.k3s_master : vm.name => vm }
 
-  name      = each.value.name
-  node_name = var.proxmox.node_name
+  name        = each.value.name
+  node_name   = var.proxmox.node_name
   description = "K3s Master Node"
 
   clone {
@@ -56,10 +56,16 @@ resource "proxmox_virtual_environment_vm" "master" {
 
   cpu {
     cores = each.value.cpu_cores
+    type  = "host"
   }
 
   memory {
     dedicated = each.value.memory_mb
+    floating  = each.value.memory_mb
+  }
+
+  vga {
+    type = "std"
   }
 
   disk {
@@ -71,11 +77,11 @@ resource "proxmox_virtual_environment_vm" "master" {
   }
 
   network_device {
-    bridge = each.value.bridge
+    bridge  = each.value.bridge
     vlan_id = var.vlan_id
   }
 
- # cloud-init config
+  # cloud-init config
   initialization {
     interface           = var.cloud_init_interface
     type                = "nocloud"
@@ -84,7 +90,7 @@ resource "proxmox_virtual_environment_vm" "master" {
     user_account {
       username = var.cloud_init_username
       #password = var.cloud_init_password
-      keys     = [trimspace(data.local_file.ssh_pub.content)]
+      keys = [trimspace(data.local_file.ssh_pub.content)]
     }
 
     ip_config {
@@ -113,8 +119,8 @@ resource "proxmox_virtual_environment_vm" "master" {
 resource "proxmox_virtual_environment_vm" "worker" {
   for_each = { for vm in var.k3s_worker : vm.name => vm }
 
-  name      = each.value.name
-  node_name = var.proxmox.node_name
+  name        = each.value.name
+  node_name   = var.proxmox.node_name
   description = "K3s Worker Node"
 
   clone {
@@ -131,10 +137,16 @@ resource "proxmox_virtual_environment_vm" "worker" {
 
   cpu {
     cores = each.value.cpu_cores
+    type  = "host"
   }
 
   memory {
     dedicated = each.value.memory_mb
+    floating  = each.value.memory_mb
+  }
+
+  vga {
+    type = "std"
   }
 
   disk {
@@ -146,7 +158,7 @@ resource "proxmox_virtual_environment_vm" "worker" {
   }
 
   network_device {
-    bridge = each.value.bridge
+    bridge  = each.value.bridge
     vlan_id = var.vlan_id
   }
 
@@ -169,7 +181,7 @@ resource "proxmox_virtual_environment_vm" "worker" {
     user_account {
       username = var.cloud_init_username
       #password = var.cloud_init_password
-      keys     = [trimspace(data.local_file.ssh_pub.content)]
+      keys = [trimspace(data.local_file.ssh_pub.content)]
     }
   }
 
@@ -181,16 +193,16 @@ output "cluster_summary" {
   sensitive = true
   value = {
     masters = {
-      count = length(var.k3s_master)
-      names = [for m in proxmox_virtual_environment_vm.master : m.name]
-      ips   = [for m in proxmox_virtual_environment_vm.master : try(m.ipv4_addresses[1][0], "N/A")]
+      count     = length(var.k3s_master)
+      names     = [for m in proxmox_virtual_environment_vm.master : m.name]
+      ips       = [for m in proxmox_virtual_environment_vm.master : try(m.ipv4_addresses[1][0], "N/A")]
       cpu_cores = [for m in var.k3s_master : m.cpu_cores]
       memory_mb = [for m in var.k3s_master : m.memory_mb]
     }
     workers = {
-      count = length(var.k3s_worker)
-      names = [for w in proxmox_virtual_environment_vm.worker : w.name]
-      ips   = [for w in proxmox_virtual_environment_vm.worker : try(w.ipv4_addresses[1][0], "N/A")]
+      count     = length(var.k3s_worker)
+      names     = [for w in proxmox_virtual_environment_vm.worker : w.name]
+      ips       = [for w in proxmox_virtual_environment_vm.worker : try(w.ipv4_addresses[1][0], "N/A")]
       cpu_cores = [for w in var.k3s_worker : w.cpu_cores]
       memory_mb = [for w in var.k3s_worker : w.memory_mb]
     }

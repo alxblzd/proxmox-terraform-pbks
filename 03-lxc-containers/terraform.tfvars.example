@@ -1,7 +1,7 @@
 # Copy this file to terraform.tfvars and fill in your values
 
 # Proxmox Configuration
-api_token = "terraform@pve!terraform=your-token-here"
+api_token = "terraform@pve!automation=your-token-here"
 
 # Container Configuration
 container_count       = 3

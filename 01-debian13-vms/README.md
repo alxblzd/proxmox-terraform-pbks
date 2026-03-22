@@ -18,10 +18,10 @@ vms = [
     name       = "debian13-01"
     cpu_cores  = 2
     memory_mb  = 2048
-    ip_address = "10.0.100.30/24"
-    bridge     = "vmbr2"
+    ip_address = "192.168.100.30/24"
+    bridge     = "vmbr0"
   }
 ]
 ```
 
-Template: 9100 | VLAN: 100 | User: ansible
+Template: 9100 | Storage: zfs-pool | VLAN: 100 | User: ansible

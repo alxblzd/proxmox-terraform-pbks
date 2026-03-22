@@ -30,8 +30,18 @@ resource "proxmox_virtual_environment_vm" "manager" {
 
   clone { vm_id = var.proxmox.template_id }
   agent { enabled = true }
-  cpu { cores = var.docker_manager.cpu_cores }
-  memory { dedicated = var.docker_manager.memory_mb }
+  cpu {
+    cores = var.docker_manager.cpu_cores
+    type  = "host"
+  }
+  memory {
+    dedicated = var.docker_manager.memory_mb
+    floating  = var.docker_manager.memory_mb
+  }
+
+  vga {
+    type = "std"
+  }
   network_device { bridge = "vmbr0" }
 
   started = true
@@ -46,8 +56,18 @@ resource "proxmox_virtual_environment_vm" "worker" {
 
   clone { vm_id = var.proxmox.template_id }
   agent { enabled = true }
-  cpu { cores = var.docker_worker.cpu_cores }
-  memory { dedicated = var.docker_worker.memory_mb }
+  cpu {
+    cores = var.docker_worker.cpu_cores
+    type  = "host"
+  }
+  memory {
+    dedicated = var.docker_worker.memory_mb
+    floating  = var.docker_worker.memory_mb
+  }
+
+  vga {
+    type = "std"
+  }
   network_device { bridge = "vmbr0" }
 
   started = true

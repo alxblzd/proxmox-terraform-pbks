@@ -29,8 +29,18 @@ resource "proxmox_virtual_environment_vm" "vm" {
 
   clone { vm_id = var.proxmox.template_id }
   agent { enabled = true }
-  cpu { cores = var.vm_config.cpu_cores }
-  memory { dedicated = var.vm_config.memory_mb }
+  cpu {
+    cores = var.vm_config.cpu_cores
+    type  = "host"
+  }
+  memory {
+    dedicated = var.vm_config.memory_mb
+    floating  = var.vm_config.memory_mb
+  }
+
+  vga {
+    type = "std"
+  }
   network_device { bridge = "vmbr0" }
 
   started = true

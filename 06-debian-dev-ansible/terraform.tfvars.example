@@ -1,6 +1,6 @@
 proxmox = {
   endpoint    = "https://proxmox.example.com:8006/"
-  api_token   = "terraform@pve!terraform=your-token-here"
+  api_token   = "terraform@pve!automation=your-token-here"
   insecure    = true
   node_name   = "pve01"
   template_id = 9100

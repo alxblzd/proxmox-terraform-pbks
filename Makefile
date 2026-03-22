@@ -2,7 +2,7 @@
 
 .DEFAULT_GOAL := help
 
-PLAYBOOKS := 01-debian13-vms 02-ubuntu24-vms 03-lxc-containers 04-k3s-cluster 05-docker-swarm 06-debian-dev-ansible
+PLAYBOOKS := 01-debian13-vms 02-ubuntu24-vms 03-lxc-containers 04-k3s-cluster 05-docker-swarm 06-debian-dev-ansible 07-deb-bitwarden-vm
 
 help:
 	@echo "Terraform Proxmox Commands:"

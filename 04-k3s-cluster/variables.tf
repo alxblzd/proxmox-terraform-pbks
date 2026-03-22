@@ -46,13 +46,13 @@ variable "vlan_id" {
 variable "dns_servers" {
   description = "DNS servers for cloud-init configuration"
   type        = list(string)
-  default     = ["10.0.100.1"]
+  default     = ["192.168.100.1"]
 }
 
 variable "datastore_id" {
   description = "Proxmox datastore for VM disks"
   type        = string
-  default     = "vmdata"
+  default     = "zfs-pool"
 }
 
 variable "disk_size_gb" {
@@ -70,7 +70,7 @@ variable "cloud_init_username" {
 variable "cloud_init_password" {
   description = "Default password for console access"
   type        = string
-  default     = "debian123"
+  default     = ""
   sensitive   = true
 }
 

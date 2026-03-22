@@ -8,10 +8,10 @@ variable "proxmox" {
     template_id = number
   })
   default = {
-    endpoint    = "https://pvealex01.webguardx.com:8006/"
+    endpoint    = "https://proxmox.example.com:8006/"
     api_token   = ""
     insecure    = true
-    node_name   = "pvealex"
+    node_name   = "pve01"
     template_id = 9100
   }
   sensitive = true

@@ -1,0 +1,22 @@
+proxmox = {
+  endpoint    = "https://proxmox.example.com:8006/"
+  api_token   = "terraform@pve!automation=REPLACE_ME"
+  insecure    = true
+  node_name   = "pve01"
+  template_id = 9100
+}
+
+vm = {
+  vmid       = 122
+  name       = "bitwarden"
+  cpu_cores  = 2
+  memory_mb  = 4096
+  disk_gb    = 30
+  ip_address = "192.168.100.70/24"
+  bridge     = "vmbr0"
+}
+
+vlan_id        = 100
+ssh_public_key = "/home/user/.ssh/id_ed25519.pub"
+datastore_id   = "zfs-pool"
+tags           = ["terraform", "debian13", "bitwarden"]

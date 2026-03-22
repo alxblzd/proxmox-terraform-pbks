@@ -1,7 +1,7 @@
 
 proxmox = {
   endpoint    = "https://proxmox.example.com:8006/"
-  api_token   = "terraform@pve!terraform=your-token-here"
+  api_token   = "terraform@pve!automation=your-token-here"
   insecure    = true
   node_name   = "pve01"
   template_id = 9100
@@ -13,7 +13,7 @@ vms = [
     cpu_cores  = 2
     memory_mb  = 2048
     disk_gb    = 20
-    ip_address = "10.0.100.40/24"
+    ip_address = "192.168.100.40/24"
     bridge     = "vmbr0"
   },
   {
@@ -21,11 +21,12 @@ vms = [
     cpu_cores  = 2
     memory_mb  = 2048
     disk_gb    = 20
-    ip_address = "10.0.100.41/24"
+    ip_address = "192.168.100.41/24"
     bridge     = "vmbr0"
   }
 ]
 
 vlan_id        = 100
-ssh_public_key = "/home/user/.ssh/id_rsa.pub"
+ssh_public_key = "/home/user/.ssh/id_ed25519.pub"
+datastore_id   = "zfs-pool"
 tags           = ["terraform", "debian13"]
